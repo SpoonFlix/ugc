@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TomoTexture Web</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="brand">
+        <div class="logo">TT</div>
+        <div class="brand-text">
+            <h1>TomoTexture <span class="muted">web</span></h1>
+            <p class="tagline">Swap textures on your UGC canvases!</p>
+        </div>
+    </div>
+    <div class="mode-badge" id="modeBadge" title="Browser support">—</div>
+</header>
+
+<section class="picker">
+    <div class="picker-row">
+        <button id="btnOpenFolder" class="primary btn-puffy">Open Save Folder</button>
+        <button id="btnUseFiles" class="btn-puffy">Select Files Manually</button>
+        <input type="file" id="fileFallback" multiple accept=".zs" hidden>
+    </div>
+    <div class="picker-hint">
+        <span id="saveRoot" class="muted">No directory selected</span>
+    </div>
+</section>
+
+<section class="grid-section">
+    <div class="grid-header">
+        <span class="grid-title">CANVASES</span>
+        <span id="countLabel" class="muted"></span>
+    </div>
+    <div id="emptyState" class="empty">
+        <div class="empty-title">Nothing here yet!</div>
+        <div class="empty-sub">Open a save folder or drop canvas files to begin.</div>
+    </div>
+    <div id="grid" class="grid" hidden></div>
+</section>
+
+<div id="status" class="status"></div>
+
+<!-- Canvas Management Hub Dialog -->
+<dialog id="dlgManage">
+    <div class="dlg-body text-center">
+        <h2 id="dlgManageTitle">Item Name</h2>
+        <div class="muted" id="dlgManageSub">Path / Meta</div>
+        
+        <div class="manage-preview-container">
+            <div class="canvas-wrap-border">
+                <canvas id="dlgManageCanvas" width="256" height="256"></canvas>
+            </div>
+        </div>
+
+        <div class="manage-actions">
+            <button id="btnManageReplace" class="primary btn-puffy">Upload New Image</button>
+            <button id="btnManageRecrop" class="btn-puffy" disabled>Adjust Crop</button>
+            <button id="btnManageExport" class="btn-puffy">Export to PNG</button>
+            <button id="btnManageRevert" class="btn-puffy btn-danger" disabled>Revert to Backup</button>
+        </div>
+
+        <div class="dlg-actions">
+            <button data-close class="btn-puffy-small">Close</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- Crop dialog -->
+<dialog id="dlgCrop">
+    <div class="dlg-body">
+        <h2>Frame the crop</h2>
+        <p class="muted" id="dlgCropMeta">
+            Drag to position, use corners to resize. (1:1 Aspect)
+        </p>
+        <div class="crop-stage-container">
+            <div class="crop-stage" id="cropStage">
+                <canvas id="cropCanvas"></canvas>
+                <div class="crop-frame" id="cropFrame">
+                    <div class="handle h-nw" data-handle="nw"></div>
+                    <div class="handle h-ne" data-handle="ne"></div>
+                    <div class="handle h-sw" data-handle="sw"></div>
+                    <div class="handle h-se" data-handle="se"></div>
+                </div>
+            </div>
+        </div>
+        <div class="crop-info">
+            <span id="cropInfoCoords" class="muted">—</span>
+            <button id="btnCropReset" type="button" class="btn-puffy-small">Reset frame</button>
+        </div>
+        <div class="dlg-actions">
+            <button data-close class="btn-puffy">Cancel</button>
+            <button id="btnCropConfirm" class="primary btn-puffy">Use this crop</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- Replace confirmation dialog -->
+<dialog id="dlgConfirm">
+    <div class="dlg-body">
+        <h2 id="dlgConfirmTitle">Replace Texture?</h2>
+        <p id="dlgConfirmBody" class="muted"></p>
+        <div class="side-by-side">
+            <figure>
+                <div class="canvas-wrap-border"><canvas id="dlgConfirmCur" width="256" height="256"></canvas></div>
+                <figcaption>CURRENT</figcaption>
+            </figure>
+            <div class="arrow">▶</div>
+            <figure>
+                <div class="canvas-wrap-border"><canvas id="dlgConfirmNew" width="256" height="256"></canvas></div>
+                <figcaption>NEW</figcaption>
+            </figure>
+        </div>
+        <div class="checkbox-container">
+            <label class="checkbox">
+                <input type="checkbox" id="chkBackup" checked>
+                <span class="checkmark"></span>
+                Back up existing files before writing
+            </label>
+        </div>
+        <div class="dlg-actions">
+            <button data-close class="btn-puffy">Cancel</button>
+            <button id="btnConfirmReplace" class="primary btn-puffy">Replace</button>
+        </div>
+    </div>
+</dialog>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
